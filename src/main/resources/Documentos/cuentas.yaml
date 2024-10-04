@@ -1,0 +1,173 @@
+openapi: 3.0.1
+info:
+  title: Microservicio de Cuentas
+  description: "Este microservicio gestiona las operaciones relacionadas con las cuentas,\
+    \ como la creación, consulta, realizar depósito, realizar retiro."
+  version: 1.0.0
+servers:
+- url: http://localhost:8081
+  description: Generated server url
+tags:
+- name: Cuentas
+  description: Operaciones sobre cuentas
+paths:
+  /api/cuentas/{id}/retirar/{monto}:
+    put:
+      tags:
+      - Cuentas
+      summary: Realizar un retiro
+      description: Realiza un retiro de la cuenta
+      operationId: retirarCuenta
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: monto
+        in: path
+        required: true
+        schema:
+          type: number
+          format: double
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/cuentas/{id}/depositar/{monto}:
+    put:
+      tags:
+      - Cuentas
+      summary: Realizar un depósito
+      description: Realiza un depósito en la cuenta
+      operationId: depositarCuenta
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: monto
+        in: path
+        required: true
+        schema:
+          type: number
+          format: double
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/cuentas:
+    get:
+      tags:
+      - Cuentas
+      summary: Listar cuentas
+      description: Lista cuentas el sistema
+      operationId: getAllCuentas
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cuenta"
+    post:
+      tags:
+      - Cuentas
+      summary: Crear una nueva cuenta
+      description: Crea una nueva cuenta en el sistema
+      operationId: createCuenta
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Cuenta"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Cuenta"
+  /api/cuentas/{id}:
+    get:
+      tags:
+      - Cuentas
+      summary: Listar detalle de cuenta
+      description: Lista detalle de cuenta en el sistema
+      operationId: getCuentaById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Cuenta"
+    delete:
+      tags:
+      - Cuentas
+      summary: Eliminar una cuenta
+      description: Elimina una cuenta en la cuenta
+      operationId: eliminarCuenta
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+components:
+  schemas:
+    Cuenta:
+      required:
+      - saldo
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identificador único de la cuenta
+          format: int64
+          example: 1
+        numeroCuenta:
+          type: string
+          description: Número de cuenta
+          example: "1234567890"
+        saldo:
+          minimum: 1
+          type: number
+          description: Saldo en la cuenta
+          format: double
+          example: 100.0
+        tipoCuenta:
+          type: string
+          description: Tipo de Cuenta
+          example: AHORROS
+          enum:
+          - AHORROS
+          - CORRIENTE
+        clienteId:
+          type: integer
+          description: Identificador único deL CLIENTE
+          format: int64
+          example: 1
